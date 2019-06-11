@@ -1,7 +1,6 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { createStore,  applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
-import { reducer as reduxFormReducer } from 'redux-form';
 import rootReducer from './reducers';
 
 const composeEnhancers = composeWithDevTools({
@@ -11,11 +10,11 @@ const composeEnhancers = composeWithDevTools({
   traceLimit: 25
 });
 
-const store = createStore(combineReducers(
-  {form: reduxFormReducer}, 
-  rootReducer
-),
+const store = createStore(
+  rootReducer,
   composeEnhancers(applyMiddleware(thunk))
 );
+
+
 
 export default store;
