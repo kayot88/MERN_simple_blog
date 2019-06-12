@@ -1,24 +1,22 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+// const MongoStore = require('connect-mongo')(session);
 // const passport = require('passport');
 // const LocalStrategy = require('passport-local').Strategy;
-// const flash = require('connect-flash');
+const flash = require('connect-flash');
 
 const createToken = user => {
   return jwt.sign({ user }, process.env.SECRET, { expiresIn: '1d' });
 };
 exports.registerResponse = async (req, res) => {
   const { password, email, username } = req.body;
-  // console.log(password, email, username);
   const candida = User.findOne({
-    email
+    email, username
   });
-  // console.log(candida);
   try {
-    if (candida && candida.lendth>0) {
-      // console.log('candida');
-      throw new Error('user was used')
+    if (candida && candida.length>0) {
+      throw Error('stupid')
     } else {
       const salt = bcrypt.genSaltSync(10);
       const user = await User.create({
@@ -35,6 +33,7 @@ exports.registerResponse = async (req, res) => {
 };
 
 exports.loginResponse = function(req, res, next) {
+  // req.flash('warninig', 'user was found')
   const { username } = req.body;
   User.findOne({ username }).then(user => {
     if (user) {
